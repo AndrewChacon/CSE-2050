@@ -1,5 +1,1 @@
-# CSE-2050
-# CSE-2050
-# CSE-2050
-# CSE-2050
-# CSE-2050
+# Labs for CSE-2050 Data Structures & Object Oriented Programming
