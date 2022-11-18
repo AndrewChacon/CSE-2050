@@ -3,15 +3,19 @@ import unittest
 
 class TestSolvePuzzle(unittest.TestCase):
         def testClockwise(self):
-                """Tests a board solveable using only CW moves"""
+            board = [1,2,2,3,4]
+            self.assertEqual(puzzle(board), True)
 
         def testCounterClockwise(self):
-                """Tests a board solveable using only CCW moves"""
+            board = [1,1,1]
+            self.assertEqual(puzzle(board), True)
 
         def testMixed(self):
-                """Tests a board solveable using only a combination of CW and CCW moves"""
+            board = [1,3,1,4,1]
+            self.assertEqual(puzzle(board), True)
         
         def testUnsolveable(self):
-                """Tests an unsolveable board"""
+            board = [0,2,1,3,2]
+            self.assertEqual(puzzle(board), False)
 
 unittest.main()

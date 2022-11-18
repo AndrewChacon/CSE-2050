@@ -1,46 +1,66 @@
-def price_to_profit(L): pass
+def price_to_profit(L):
+    profit_values = []
+
+    for price in range(len(L)):
+
+        if price == 0: profit_values.append(0)
+        else: profit_values.append(L[price] - L[price - 1])
+
+    return profit_values
 
 
-# brute force solution, for reference
 def max_profit_brute(L):
-    """Finds maximum profit. Assumes L is a list of profits (i.e. change in price every day), not raw prices"""
-    n = len(L)
-    max_sum = 0 # assume we can at least break even - buy and sell on the same day
 
-    # outer loop finds the max profit for each buy day
+    n = len(L)
+    max_sum = 0
+
+
     for i in range(n):
-       # total profit if we bought on day i and sold on day j
         total = L[i]
         if total > max_sum: max_sum = total
 
         for j in range(i+1, n):
-            total += L[j] # total profit if we sell on day j
-                          # we assume L[j] is the profit if we bought on day j-1 and sold on day j
-                          # i.e., L is the change in value each day, relative to the day before
+            total += L[j]
             if total > max_sum: max_sum = total
-
     return max_sum
 
+def max_profit(L, left, right):
+    if left == right: return 0
 
-# you can use a helper function or add parameters, your choice
-def max_profit(L): pass
+    middle_index = (left + right) // 2
+    profit_1 = max_profit(L, left, middle_index)
+    profit_2 = max_profit(L, middle_index + 1, right)
+    profit_3 = _max_profit_center(L, left, right, middle_index)
 
-# you will need a separate function to find the "center sum"
-def _max_profit_center(L, left, right, med): pass
-
-
-
+    return max(profit_1, profit_2, profit_3)
 
 
-# some test cases, and an example of reading CSVs
+def _max_profit_center(L, left, right, med):
+
+    x, y = 0, 0
+
+    for item in range(med, left - 1, -1): 
+        y += L[item]
+        if y > x: x = y 
+
+    a, b = 0, 0
+
+    for item in range(med + 1, right + 1):
+        b += L[item]
+        if b > a: a = b
+
+    z = x + a
+
+    return max(x, a, z)
+    
 if __name__ == '__main__':
-    # some basic tests of the necessary functions
+
     assert price_to_profit([100, 105, 97, 200, 150]) == [0, 5, -8, 103, -50]
-    assert max_profit([0, 5, -8, 103, -50]) == 103
-    assert max_profit([0, -1, 3, 4, -5, 9, -2]) == 11
+    L = [1, 2, -9, 47, -10]
+    assert max_profit(L, 0 , len(L)-1) == 47
+    L2 = [0, -1, 3, 4, -5, 9, -2]
+    assert max_profit(L2, 0, len(L2)-1) == 11
 
-
-    ##### Import and read values from associated csvs, then check if you can become a bitcoin-optimaire
     import csv
     import os
 
@@ -71,15 +91,12 @@ if __name__ == '__main__':
                     vals[i].append( float(lst[j][1].replace(",","")))
 
 
-    # find the profits for each year
     year_profits = []
     for year in vals:
         year_profits.append([])
         year_profits[-1] = price_to_profit(year)
 
-    # correct max profits per year, 2015-2020, rounded to ints
     max_profits = [298, 604, 18561, 4476, 9665, 24052]
 
-    # test that max_profit returns the correct profit for each year
     for i, year in enumerate(year_profits):
-        assert round(max_profit(year), 0) == max_profits[i]
+        assert round(max_profit(year, 0, len(year)-1), 0) == max_profits[i]
