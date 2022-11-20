@@ -24,24 +24,24 @@ class Heap:
         self._heap[c], self._heap[p] = self._heap[p], self._heap[c]
 
     def findmin(self):
-        return self._heap[0].item
+        return self._heap[0].item, self._heap[0].priority
 
     def removemin(self):
         item = self._heap[0]
         self._heap[0] = self._heap[-1]
         self._heap.pop()
         self._downheap(0)
-        return item
+        return item.item, item.priority
 
     def _downheap(self, p_idx):
-        L = self._heap
+        List = self._heap
         left = self._left(p_idx)
         right = self._right(p_idx)
         index = p_idx
 
-        if self._has_left_child(p_idx) and self._heap[index] > self._heap[left]:
+        if self._has_left_child(p_idx) and List[index] > List[left]:
             index = left
-        if self._has_right_child(p_idx) and self._heap[index] > self._heap[right]:
+        if self._has_right_child(p_idx) and List[index] > List[right]:
             index = right
         if index != p_idx:
             self._swap(p_idx, index)
@@ -68,14 +68,14 @@ if __name__ == '__main__':
     heap.insert("A", 13)
     heap.insert("B", 2)
     heap.insert("C", 0)
-    heap.insert("D", 8)
-    heap.insert("E", 1)
-    heap.insert("F", 5)
-    heap.insert("G", 25)
+    # heap.insert("D", 8)
+    # heap.insert("E", 1)
+    # heap.insert("F", 5)
+    # heap.insert("G", 25)
 
     print(f"min: {heap.findmin()}")
-    heap.removemin()
-    heap.removemin()
+    # heap.removemin()
+    # heap.removemin()
     for entry in heap._heap:
         print(f"item: {entry.item}", end=" ")
         print(f"priority: {entry.priority}")
